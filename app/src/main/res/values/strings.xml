@@ -12,4 +12,11 @@
     <string name="save_remember_me_option">Recordarme</string>
     <string name="login_btn_text">Ingresar</string>
     <string name="login">Ingreso</string>
+    <string name="create_account">Registro</string>
+    <string name="phone">Telefono</string>
+    <string name="example_phone">Ej: +52 12345678</string>
+    <string name="have_an_account">Ya tienes una cuenta?</string>
+    <string name="confim_password">Confimar contraseña</string>
+    <string name="repeat_password">Reingresar contraseña</string>
+    <string name="register_btn_text">Crear cuenta</string>
 </resources>

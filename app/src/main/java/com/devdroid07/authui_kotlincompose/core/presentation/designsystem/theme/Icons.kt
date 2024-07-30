@@ -20,3 +20,7 @@ val EyeClosedIcon: ImageVector
 val EyeOpenedIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_eye_opened)
+
+val PhoneIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_phone)

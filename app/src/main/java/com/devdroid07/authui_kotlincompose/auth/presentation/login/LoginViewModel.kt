@@ -41,6 +41,7 @@ class LoginViewModel @Inject constructor(
                     )
                 }
             }
+            else -> Unit
         }
     }
 }
