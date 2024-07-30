@@ -42,4 +42,4 @@ navigation: Modulo que contiene toda la navegacion de pantallas.
 
 ##Video de ejecucion de App
 
-https://github.com/EliasMP07/AuthUI-KotlinCompose/assets/video_demo.mov
+https://github.com/EliasMP07/AuthUI-KotlinCompose/assets/video_demo
