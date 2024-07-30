@@ -2,13 +2,11 @@ package com.devdroid07.authui_kotlincompose.auth.presentation.register
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -16,6 +14,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -27,9 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.devdroid07.authui_kotlincompose.R
-import com.devdroid07.authui_kotlincompose.auth.presentation.login.LoginAction
-import com.devdroid07.authui_kotlincompose.auth.presentation.login.LoginState
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.components.AuthUiKotlinComposeButton
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.components.AuthUiKotlinComposeTextField
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.components.AuthUiKotlinComposeTextFieldPassword
@@ -39,19 +38,31 @@ import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.EmailIcon
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.LocalSpacing
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.PhoneIcon
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreenRoot(
-
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
 
+    val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     RegisterScreen(
-        state = RegisterState(),
+        state = state,
         snackbarHostState = snackbarHostState,
-        onAction = {
+        onAction = { action ->
+            when (action) {
+                RegisterAction.OnRegisterClick -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar("Se presiono el botom de Crear cuenta")
+                    }
+                    viewModel.onAction(action)
+                }
+                else -> Unit
+            }
+            viewModel.onAction(action)
         }
     )
 }
@@ -89,6 +100,8 @@ fun RegisterScreen(
 
                 AuthUiKotlinComposeTextField(
                     value = state.email,
+                    errorMessage = state.emailError?.asString(),
+                    isError = state.emailError != null,
                     title = stringResource(R.string.email),
                     onValueChange = {
                         onAction(RegisterAction.OnEmailChange(it))
@@ -102,6 +115,8 @@ fun RegisterScreen(
 
                 AuthUiKotlinComposeTextField(
                     value = state.numberPhone,
+                    isError = state.numberPhoneError != null,
+                    errorMessage = state.numberPhoneError?.asString(),
                     title = stringResource(R.string.phone),
                     onValueChange = {
                         onAction(RegisterAction.OnNumberPhoneChange(it))
@@ -115,6 +130,8 @@ fun RegisterScreen(
 
                 AuthUiKotlinComposeTextFieldPassword(
                     value = state.password,
+                    isError = state.passwordError != null,
+                    errorMessage = state.passwordError?.asString(),
                     onValueChange = {
                         onAction(RegisterAction.OnPasswordChange(it))
                     }
@@ -124,6 +141,8 @@ fun RegisterScreen(
 
                 AuthUiKotlinComposeTextFieldPassword(
                     value = state.repeatPassword,
+                    errorMessage = state.repeatPasswordError?.asString(),
+                    isError = state.repeatPasswordError != null,
                     placeholder = stringResource(id = R.string.repeat_password),
                     title = stringResource(id = R.string.confim_password),
                     onValueChange = {
@@ -141,7 +160,9 @@ fun RegisterScreen(
                             vertical = spacing.spaceMedium
                         ),
                     text = stringResource(R.string.register_btn_text),
-                    onClick = {}
+                    onClick = {
+                        onAction(RegisterAction.OnRegisterClick)
+                    }
                 )
 
                 val annotatedString = buildAnnotatedString {

@@ -19,4 +19,9 @@
     <string name="confim_password">Confimar contraseña</string>
     <string name="repeat_password">Reingresar contraseña</string>
     <string name="register_btn_text">Crear cuenta</string>
+    <string name="error_email_invalid">Correo inválido</string>
+    <string name="password_dont_strong">Contraseña debil</string>
+    <string name="phone_invalid">Numero inválido</string>
+    <string name="error_passwords">La contraseña no coincide</string>
+    <string name="error_password_weak">Contraseña débil</string>
 </resources>
