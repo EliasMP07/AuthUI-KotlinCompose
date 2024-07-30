@@ -10,6 +10,9 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.navigation.NavBackStackEntry
 
+/**
+ * Animaciones de transicion de pantallas
+ */
 fun AnimatedContentTransitionScope<NavBackStackEntry>.enterTransition() =
     slideIntoContainer(
         towards = AnimatedContentTransitionScope.SlideDirection.Left,
