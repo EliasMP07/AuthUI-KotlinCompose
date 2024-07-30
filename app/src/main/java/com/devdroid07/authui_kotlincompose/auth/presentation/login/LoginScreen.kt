@@ -1,6 +1,7 @@
 package com.devdroid07.authui_kotlincompose.auth.presentation.login
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -27,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.devdroid07.authui_kotlincompose.R
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.components.AuthUiKotlinComposeButton
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.components.AuthUiKotlinComposeTextField
@@ -40,16 +44,34 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreenRoot(
-
+    viewModel: LoginViewModel = hiltViewModel(),
+    context: Context,
+    navigateToRegister: () -> Unit
 ) {
 
+    val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LoginScreen(
-        state = LoginState(),
+        state = state,
         snackbarHostState = snackbarHostState,
-        onAction = {
+        onAction = { action ->
+            viewModel.onAction(action)
+            when (action) {
+                LoginAction.OnToggleCheckBoxClick -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(if (state.isChecked) context.getString(R.string.active_checkbox) else context.getString(R.string.disable_checkbox))
+                    }
+                }
+                LoginAction.OnForgotPasswordClick -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(context.getString(R.string.reset_password))
+                    }
+                }
+                LoginAction.OnRegisterClick -> navigateToRegister()
+                else -> Unit
+            }
         }
     )
 }
@@ -88,6 +110,8 @@ fun LoginScreen(
                 AuthUiKotlinComposeTextField(
                     value = state.email,
                     title = stringResource(R.string.email),
+                    errorMessage = state.emailError?.asString(),
+                    isError = state.emailError != null,
                     onValueChange = {
                         onAction(LoginAction.OnEmailChange(it))
                     },
@@ -100,6 +124,8 @@ fun LoginScreen(
 
                 AuthUiKotlinComposeTextFieldPassword(
                     value = state.password,
+                    errorMessage = state.passwordError?.asString(),
+                    isError = state.passwordError != null,
                     onValueChange = {
                         onAction(LoginAction.OnPasswordChange(it))
                     }
@@ -132,7 +158,7 @@ fun LoginScreen(
                     Checkbox(
                         checked = state.isChecked,
                         onCheckedChange = {
-
+                            onAction(LoginAction.OnToggleCheckBoxClick)
                         }
                     )
                     Text(
@@ -144,14 +170,8 @@ fun LoginScreen(
                         modifier = Modifier
                             .padding(vertical = spacing.spaceSmall),
                         text = annotationString,
-                        onClick = { offset ->
-                            annotationString.getStringAnnotations(
-                                tag = "clickable_text",
-                                start = offset,
-                                end = offset,
-                            ).firstOrNull()?.let {
-
-                            }
+                        onClick = { _ ->
+                            onAction(LoginAction.OnForgotPasswordClick)
                         })
                 }
 
@@ -163,7 +183,9 @@ fun LoginScreen(
                             vertical = spacing.spaceMedium
                         ),
                     text = stringResource(R.string.login_btn_text),
-                    onClick = {}
+                    onClick = {
+                        onAction(LoginAction.OnLoginClick)
+                    }
                 )
 
                 val annotatedString = buildAnnotatedString {
@@ -209,7 +231,7 @@ fun LoginScreen(
                             start = offset,
                             end = offset,
                         ).firstOrNull()?.let {
-
+                            onAction(LoginAction.OnRegisterClick)
                         }
                     }
                 )
