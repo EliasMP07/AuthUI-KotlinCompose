@@ -44,12 +44,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreenRoot(
-    viewModel: LoginViewModel = hiltViewModel(),
+    state: LoginState,
     context: Context,
+    onAction: (LoginAction) -> Unit,
     navigateToRegister: () -> Unit
 ) {
 
-    val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -57,7 +57,7 @@ fun LoginScreenRoot(
         state = state,
         snackbarHostState = snackbarHostState,
         onAction = { action ->
-            viewModel.onAction(action)
+            onAction(action)
             when (action) {
                 LoginAction.OnToggleCheckBoxClick -> {
                     scope.launch {
