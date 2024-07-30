@@ -24,4 +24,7 @@
     <string name="phone_invalid">Numero inválido</string>
     <string name="error_passwords">La contraseña no coincide</string>
     <string name="error_password_weak">Contraseña débil</string>
+    <string name="reset_password">Envia a resetear la Contraseña</string>
+    <string name="disable_checkbox">Se desactivo recordar</string>
+    <string name="active_checkbox">Se activo recordar</string>
 </resources>
