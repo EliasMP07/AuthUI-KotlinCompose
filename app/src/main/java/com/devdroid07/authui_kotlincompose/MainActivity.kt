@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.devdroid07.authui_kotlincompose.ui.theme.AuthUIKotlinComposeTheme
+import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.AuthUIKotlinComposeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,5 @@
-package com.devdroid07.authui_kotlincompose.ui.theme
+package com.devdroid07.authui_kotlincompose.core.presentation.designsystem
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

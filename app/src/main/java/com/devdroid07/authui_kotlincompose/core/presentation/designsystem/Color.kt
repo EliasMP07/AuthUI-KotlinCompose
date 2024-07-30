@@ -1,4 +1,4 @@
-package com.devdroid07.authui_kotlincompose.ui.theme
+package com.devdroid07.authui_kotlincompose.core.presentation.designsystem
 
 import androidx.compose.ui.graphics.Color
 
