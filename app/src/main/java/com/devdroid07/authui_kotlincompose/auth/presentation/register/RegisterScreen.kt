@@ -1,6 +1,7 @@
 package com.devdroid07.authui_kotlincompose.auth.presentation.register
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,10 +43,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreenRoot(
-    viewModel: RegisterViewModel = hiltViewModel()
+    state: RegisterState,
+    context: Context,
+    onAction: (RegisterAction) -> Unit,
+    navigateToLogin : () -> Unit
 ) {
 
-    val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -53,16 +56,16 @@ fun RegisterScreenRoot(
         state = state,
         snackbarHostState = snackbarHostState,
         onAction = { action ->
+            onAction(action)
             when (action) {
                 RegisterAction.OnRegisterClick -> {
                     scope.launch {
                         snackbarHostState.showSnackbar("Se presiono el botom de Crear cuenta")
                     }
-                    viewModel.onAction(action)
                 }
+                RegisterAction.OnLoginClick -> navigateToLogin()
                 else -> Unit
             }
-            viewModel.onAction(action)
         }
     )
 }
@@ -208,7 +211,7 @@ fun RegisterScreen(
                             start = offset,
                             end = offset,
                         ).firstOrNull()?.let {
-
+                            onAction(RegisterAction.OnLoginClick)
                         }
                     }
                 )

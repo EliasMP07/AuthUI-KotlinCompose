@@ -5,6 +5,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+lifecycleRuntimeCompose = "2.8.4"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
@@ -34,6 +35,7 @@ hilt-compiler-android = {group = "com.google.dagger", name = "hilt-android-compi
 hilt-android = {group = "com.google.dagger", name = "hilt-android", version.ref = "hilt_version"}
 hilt-navigation-compose =  {group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation"}
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
