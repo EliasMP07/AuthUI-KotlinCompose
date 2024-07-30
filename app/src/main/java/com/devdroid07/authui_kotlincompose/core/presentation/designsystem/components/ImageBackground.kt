@@ -18,6 +18,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.devdroid07.authui_kotlincompose.R
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.AuthUIKotlinComposeTheme
 
+/**
+ * Componente de fondo de imagen que puede incluir una barra de herramientas y contenido.
+ *
+ * @param modifier Modificador para ajustar el diseño del componente.
+ * @param hasToolbar Indica si el fondo incluye una barra de herramientas.
+ * @param content Contenido composable que se mostrará sobre el fondo.
+ */
 @Composable
 fun ImageBackground(
     modifier: Modifier = Modifier,
@@ -57,7 +64,7 @@ fun ImageBackground(
 
 @Preview
 @Composable
-private fun GradientBackgroundPreview() {
+private fun ImageBackgroundPreview() {
     AuthUIKotlinComposeTheme {
         ImageBackground(
             modifier = Modifier.fillMaxSize()
