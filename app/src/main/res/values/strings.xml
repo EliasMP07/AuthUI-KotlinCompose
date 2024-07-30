@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">AuthUI-KotlinCompose</string>
+    <string name="show_password">Mostrar contraseña</string>
+    <string name="hide_password">Ocultar contraseña</string>
+    <string name="example_password">Ej:abcABC#123</string>
+    <string name="password">Contraseña</string>
+    <string name="dont_have_an_account">No tienes una cuenta?</string>
+    <string name="register"> Registrarse</string>
+    <string name="forgotPassword">Contraseña olvidada?</string>
+    <string name="email">Correo electronico</string>
+    <string name="input_email">Ingresa correo electronico</string>
+    <string name="save_remember_me_option">Recordarme</string>
+    <string name="login_btn_text">Ingresar</string>
+    <string name="login">Ingreso</string>
 </resources>
