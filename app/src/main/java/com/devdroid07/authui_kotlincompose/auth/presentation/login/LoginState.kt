@@ -10,4 +10,5 @@ data class LoginState(
     val password: String = "",
     val passwordError: UiText? = null,
     val isChecked: Boolean = false,
+    val loginSuccess: Boolean = false
 )

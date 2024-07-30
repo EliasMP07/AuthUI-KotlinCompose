@@ -27,4 +27,6 @@
     <string name="reset_password">Envia a resetear la Contraseña</string>
     <string name="disable_checkbox">Se desactivo recordar</string>
     <string name="active_checkbox">Se activo recordar</string>
+    <string name="error_password">Contraseña incorrecta</string>
+    <string name="btn_login_press">Se presiono el botón ingresar</string>
 </resources>

@@ -11,6 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 
+/**
+ * Botón personalizado para la interfaz de usuario de autenticación en Kotlin Compose.
+ *
+ * @param text El texto que se muestra dentro del botón.
+ * @param modifier Modificador para ajustar el diseño del botón.
+ * @param enabled Indica si el botón está habilitado o no.
+ * @param onClick Función que se ejecuta cuando se hace clic en el botón.
+ */
 @Composable
 fun AuthUiKotlinComposeButton(
     text: String,

@@ -16,7 +16,6 @@ import com.devdroid07.authui_kotlincompose.navigation.utils.RoutesScreens
 import com.devdroid07.authui_kotlincompose.navigation.utils.enterTransition
 import com.devdroid07.authui_kotlincompose.navigation.utils.exitTransition
 import com.devdroid07.authui_kotlincompose.navigation.utils.lifecycleIsResumed
-import com.devdroid07.authui_kotlincompose.navigation.utils.navigateTo
 import com.devdroid07.authui_kotlincompose.navigation.utils.navigateToSingleTop
 import com.devdroid07.authui_kotlincompose.navigation.utils.popEnterTransition
 import com.devdroid07.authui_kotlincompose.navigation.utils.popExitTransition
@@ -46,9 +45,14 @@ fun NavGraphBuilder.auth(
                 state = state,
                 onAction = onAction,
                 context = context,
+                onLoginSuccess = {
+                    if (navBackEntry.lifecycleIsResumed()) {
+                        navController.navigateToSingleTop(RoutesScreens.Register)
+                    }
+                },
                 navigateToRegister = {
                     if (navBackEntry.lifecycleIsResumed()) {
-                        navController.navigateTo(RoutesScreens.Register)
+                        navController.navigateToSingleTop(RoutesScreens.Register)
                     }
                 }
             )

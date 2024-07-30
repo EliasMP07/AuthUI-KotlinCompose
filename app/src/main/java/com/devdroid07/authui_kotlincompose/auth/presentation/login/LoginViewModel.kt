@@ -11,16 +11,27 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
+/**
+ * ViewModel para el manejo de la lógica de inicio de sesión.
+ *
+ * @param userDataValidator Validador de datos de usuario.
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userDataValidator: UserDataValidator
+    private val userDataValidator: UserDataValidator,
 ) : ViewModel() {
 
+    //Variable que contiene los estado de la ui
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> get() = _state.asStateFlow()
 
+    /**
+     * Maneja las acciones de la UI y actualiza el estado en consecuencia.
+     *
+     * @param action Acción disparada desde la UI.
+     */
     fun onAction(
-        action: LoginAction
+        action: LoginAction,
     ) {
         when (action) {
             is LoginAction.OnEmailChange -> {
@@ -51,21 +62,32 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun login(){
+    /**
+     * Realiza el proceso de inicio de sesión.
+     * Simula un loginSuccess y valida los campos de texto.
+     */
+    private fun login() {
         val emailValidationResult = userDataValidator.validateEmail(state.value.email)
         val passwordValidationResult = userDataValidator.validatePassword(state.value.password)
-        _state.update {loginState ->
+        _state.update { loginState ->
             loginState.copy(
+                loginSuccess = emailValidationResult == UserDataValidator.ValidationResult.SUCCESS && passwordValidationResult == UserDataValidator.ValidationResult.SUCCESS,
                 emailError = asignErrorMessage(emailValidationResult),
-                passwordError = asignErrorMessage(passwordValidationResult)
+                passwordError = asignErrorMessage(passwordValidationResult),
             )
         }
     }
 
+    /**
+     * Asigna el mensaje de error basado en el resultado de validación.
+     *
+     * @param validationResult Resultado de la validación.
+     * @return Devuelve el mensaje de error para la UI.
+     */
     private fun asignErrorMessage(validationResult: UserDataValidator.ValidationResult): UiText? {
-        return when(validationResult) {
+        return when (validationResult) {
             UserDataValidator.ValidationResult.INVALID_EMAIL -> UiText.StringResource(R.string.error_email_invalid)
-            UserDataValidator.ValidationResult.WEAK_PASSWORD -> UiText.StringResource(R.string.error_password_weak)
+            UserDataValidator.ValidationResult.WEAK_PASSWORD -> UiText.StringResource(R.string.error_password)
             else -> null
         }
     }

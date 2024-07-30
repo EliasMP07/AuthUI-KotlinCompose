@@ -36,6 +36,23 @@ import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.EyeClosedIcon
 import com.devdroid07.authui_kotlincompose.core.presentation.designsystem.theme.EyeOpenedIcon
 
+/**
+ * Campo de texto personalizable con soporte para contraseñas y manejo de errores.
+ *
+ * @param modifier Modificador para ajustar el diseño del campo de texto.
+ * @param value El texto actual en el campo.
+ * @param title Título que se muestra sobre el campo de texto (opcional).
+ * @param onValueChange Función que se ejecuta cuando el texto cambia.
+ * @param placeholder Texto que se muestra cuando el campo está vacío.
+ * @param contentDescription Descripción para accesibilidad.
+ * @param errorMessage Mensaje de error que se muestra debajo del campo (opcional).
+ * @param leadingIcon Icono que se muestra al principio del campo de texto (opcional).
+ * @param isPassword Indica si el campo es para contraseñas.
+ * @param isError Indica si hay un error en el campo.
+ * @param isEnabled Indica si el campo está habilitado.
+ * @param keyboardOptions Opciones del teclado.
+ * @param keyboardActions Acciones del teclado.
+ */
 @Composable
 fun AuthUiKotlinComposeTextField(
     modifier: Modifier = Modifier,

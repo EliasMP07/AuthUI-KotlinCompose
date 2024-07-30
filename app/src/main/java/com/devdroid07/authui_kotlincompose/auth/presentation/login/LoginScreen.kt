@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -17,16 +19,21 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,11 +54,20 @@ fun LoginScreenRoot(
     state: LoginState,
     context: Context,
     onAction: (LoginAction) -> Unit,
-    navigateToRegister: () -> Unit
+    onLoginSuccess: () -> Unit,
+    navigateToRegister: () -> Unit,
 ) {
-
+    //Scope para poder mostrar el snackbar
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    //Launch effect para cambiar a la otra pantalla cuando se inicia sesion
+    LaunchedEffect(key1 = state.loginSuccess) {
+        if (state.loginSuccess) {
+            onLoginSuccess()
+        }
+    }
+
 
     LoginScreen(
         state = state,
@@ -61,12 +77,17 @@ fun LoginScreenRoot(
             when (action) {
                 LoginAction.OnToggleCheckBoxClick -> {
                     scope.launch {
-                        snackbarHostState.showSnackbar(if (state.isChecked) context.getString(R.string.active_checkbox) else context.getString(R.string.disable_checkbox))
+                        snackbarHostState.showSnackbar(if (state.isChecked) context.getString(R.string.disable_checkbox) else context.getString(R.string.active_checkbox))
                     }
                 }
                 LoginAction.OnForgotPasswordClick -> {
                     scope.launch {
                         snackbarHostState.showSnackbar(context.getString(R.string.reset_password))
+                    }
+                }
+                LoginAction.OnLoginClick -> {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(if (state.isChecked) context.getString(R.string.active_checkbox) else context.getString(R.string.btn_login_press))
                     }
                 }
                 LoginAction.OnRegisterClick -> navigateToRegister()
@@ -81,9 +102,12 @@ fun LoginScreenRoot(
 fun LoginScreen(
     state: LoginState,
     snackbarHostState: SnackbarHostState,
-    onAction: (LoginAction) -> Unit
+    onAction: (LoginAction) -> Unit,
 ) {
+
     val spacing = LocalSpacing.current
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -117,7 +141,17 @@ fun LoginScreen(
                     },
                     placeholder = stringResource(R.string.input_email),
                     leadingIcon = EmailIcon,
-                    contentDescription = stringResource(R.string.email)
+                    contentDescription = stringResource(R.string.email),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
@@ -128,7 +162,17 @@ fun LoginScreen(
                     isError = state.passwordError != null,
                     onValueChange = {
                         onAction(LoginAction.OnPasswordChange(it))
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            focusManager.clearFocus()
+                        }
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))
