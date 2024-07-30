@@ -1,6 +1,9 @@
 package com.devdroid07.authui_kotlincompose.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
+import com.devdroid07.authui_kotlincompose.R
+import com.devdroid07.authui_kotlincompose.auth.domain.validator.UserDataValidator
+import com.devdroid07.authui_kotlincompose.core.presentation.ui.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -41,6 +43,8 @@ class LoginViewModel @Inject constructor(
                     )
                 }
             }
+            else -> Unit
         }
     }
+
 }

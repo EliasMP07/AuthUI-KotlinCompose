@@ -72,7 +72,9 @@ fun AuthUiKotlinComposeTextField(
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.8f
-                )
+                ),
+                unfocusedContainerColor = Color(0xFFF7F5F5),
+                focusedContainerColor = Color(0xFFF7F5F5)
             ),
             isError = isError,
             visualTransformation = if (isPassword && hidePassword) PasswordVisualTransformation() else VisualTransformation.None,
@@ -93,11 +95,12 @@ fun AuthUiKotlinComposeTextField(
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = leadingIcon,
-                            contentDescription = contentDescription
+                            contentDescription = contentDescription,
+                            tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         VerticalDivider(
-                            color = Color.Gray,
+                            color = if (isError) MaterialTheme.colorScheme.error else Color.Gray,
                             modifier = Modifier.height(30.dp)
                         )
                     }
