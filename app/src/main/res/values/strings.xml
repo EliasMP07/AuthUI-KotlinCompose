@@ -29,4 +29,5 @@
     <string name="active_checkbox">Se activo recordar</string>
     <string name="error_password">Contraseña incorrecta</string>
     <string name="btn_login_press">Se presiono el botón ingresar</string>
+    <string name="btn_register_click">Se presiono el botom de Crear cuenta</string>
 </resources>

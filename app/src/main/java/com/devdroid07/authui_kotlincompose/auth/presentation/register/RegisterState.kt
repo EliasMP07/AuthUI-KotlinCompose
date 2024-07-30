@@ -12,5 +12,6 @@ data class RegisterState(
     val numberPhone: String = "",
     val numberPhoneError: UiText? = null,
     val repeatPassword: String = "",
-    val repeatPasswordError: UiText? = null
+    val repeatPasswordError: UiText? = null,
+    val registerSuccess: Boolean = false
 )

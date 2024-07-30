@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -15,16 +17,21 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,12 +52,20 @@ import kotlinx.coroutines.launch
 fun RegisterScreenRoot(
     state: RegisterState,
     context: Context,
+    onRegisterSuccess: () -> Unit,
     onAction: (RegisterAction) -> Unit,
-    navigateToLogin : () -> Unit
+    navigateToLogin: () -> Unit,
 ) {
-
+    //Scope para poder mostrar el snackbar
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    //Launch effect para cambiar a la otra pantalla cuando se registra
+    LaunchedEffect(key1 = state.registerSuccess) {
+        if (state.registerSuccess) {
+            onRegisterSuccess()
+        }
+    }
 
     RegisterScreen(
         state = state,
@@ -60,7 +75,7 @@ fun RegisterScreenRoot(
             when (action) {
                 RegisterAction.OnRegisterClick -> {
                     scope.launch {
-                        snackbarHostState.showSnackbar("Se presiono el botom de Crear cuenta")
+                        snackbarHostState.showSnackbar(context.getString(R.string.btn_register_click))
                     }
                 }
                 RegisterAction.OnLoginClick -> navigateToLogin()
@@ -75,9 +90,11 @@ fun RegisterScreenRoot(
 fun RegisterScreen(
     state: RegisterState,
     snackbarHostState: SnackbarHostState,
-    onAction: (RegisterAction) -> Unit
+    onAction: (RegisterAction) -> Unit,
 ) {
     val spacing = LocalSpacing.current
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -111,7 +128,17 @@ fun RegisterScreen(
                     },
                     placeholder = stringResource(R.string.input_email),
                     leadingIcon = EmailIcon,
-                    contentDescription = stringResource(R.string.email)
+                    contentDescription = stringResource(R.string.email),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
@@ -126,7 +153,17 @@ fun RegisterScreen(
                     },
                     placeholder = stringResource(R.string.example_phone),
                     leadingIcon = PhoneIcon,
-                    contentDescription = stringResource(R.string.email)
+                    contentDescription = stringResource(R.string.email),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
@@ -137,7 +174,17 @@ fun RegisterScreen(
                     errorMessage = state.passwordError?.asString(),
                     onValueChange = {
                         onAction(RegisterAction.OnPasswordChange(it))
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
@@ -150,7 +197,17 @@ fun RegisterScreen(
                     title = stringResource(id = R.string.confim_password),
                     onValueChange = {
                         onAction(RegisterAction.OnRepeatPasswordChange(it))
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onAny = {
+                            focusManager.clearFocus()
+                        }
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(spacing.spaceSmall))

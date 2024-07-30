@@ -74,6 +74,11 @@ fun NavGraphBuilder.auth(
                 state = state,
                 context = context,
                 onAction = onAction,
+                onRegisterSuccess = {
+                    if (navBackEntry.lifecycleIsResumed()) {
+                        navController.navigateToSingleTop(RoutesScreens.Login)
+                    }
+                },
                 navigateToLogin = {
                     if (navBackEntry.lifecycleIsResumed()) {
                         navController.navigateToSingleTop(RoutesScreens.Login)
