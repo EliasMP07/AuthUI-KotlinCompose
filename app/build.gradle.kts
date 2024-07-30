@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.android.hilt.plugin)
+    id("kotlin-kapt")
 }
 
 android {
@@ -40,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -50,7 +53,16 @@ android {
 }
 
 dependencies {
+    // Get day of week api 25 or lower
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    //DaggerHilt
+    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.compiler.android)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
 
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
